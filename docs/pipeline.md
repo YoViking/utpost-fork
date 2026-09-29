@@ -1,3 +1,27 @@
+# Pipeline Docs
+
+## Ruleset på main
+
+Rulesetet heter `main` och ligger under _Settings → Rules → Rulesets_.
+
+| Inställning | Värde |
+| --- | --- |
+| Enforcement status | **Active** |
+| Target | Default branch (`main`) |
+| Bypass list | Tom – reglerna gäller även admins |
+
+Regler:
+
+- **Restrict deletions** – `main` kan inte raderas.
+- **Block force pushes** – ingen kan skriva om historiken på `main`.
+- **Require a pull request before merging**
+  - Minst **1** godkännande krävs, så ingen kan merga sin egen PR ensam.
+  - Tillåtna merge-metoder: merge och squash.
+- **Require status checks to pass**
+  - Kräver: **`Quality`** och **`Build`** från GitHub Actions. Namnen är
+    jobbens `name:` i `.github/workflows/ci.yml`.
+  - **Require branches to be up to date before merging** är på – branchen måste
+    vara uppdaterad mot `main` innan merge.
 
 ## CI flödesdiagram
 
@@ -30,7 +54,7 @@ flowchart LR
 ## CI Tidsmätning
 
 ```bash
-== Quality
+== Quality 13s
 0s      Set up job
 1s      Run actions/checkout@v4
 1s      Run actions/setup-node@v4
@@ -41,7 +65,7 @@ flowchart LR
 0s      Post Run actions/setup-node@v4
 0s      Post Run actions/checkout@v4
 0s      Complete job
-== Build
+== Build 15s
 1s      Set up job
 0s      Run actions/checkout@v4
 1s      Run actions/setup-node@v4
