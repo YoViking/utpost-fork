@@ -3,13 +3,28 @@
 
 ```mermaid
 flowchart LR
-  B[branch + commit] --> PR[pull request]
-  PR --> Q[Kvalitet: lint · format · test]
-  PR --> BU[Bygg]
-  Q --> S{gröna?}
-  BU --> S
-  S -->|ja| M[merge]
-  S -->|nej| F[fixa, pusha igen]
+  B[commit på branch] --> P[push]
+  P --> PR[pull request mot main]
+
+  subgraph CI [GitHub Actions: CI]
+    direction TB
+    subgraph Q [Quality]
+      direction TB
+      Q1[npm ci] --> Q2[npm run lint] --> Q3[npm run format:check] --> Q4[npm test]
+    end
+    subgraph BU [Build]
+      direction TB
+      B1[npm ci] --> B2[npm run build] --> B3[ladda upp client/dist]
+    end
+  end
+
+  PR --> Q1
+  PR --> B1
+  Q4 --> S{Ruleset på main:<br/>Quality + Build gröna?<br/>branch uppdaterad mot main?<br/>1 godkännande?}
+  B3 --> S
+  S -->|nej| F[fixa, pusha igen] --> P
+  S -->|ja| M[merge till main]
+  M --> MAIN[push till main kör CI igen]
 ```
 
 ## CI Tidsmätning
