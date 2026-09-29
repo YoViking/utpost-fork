@@ -32,16 +32,35 @@ committa och deploya ofta och Git Flow är väl lämplig för det. Vi avser dock
 npm install
 docker compose -f docker-compose.dev.yml up -d
 npm run seed
-npm start
+npm run dev
 ```
 
-Appen ligger sen på http://localhost:3000 och API:et pa http://localhost:4000.
+`npm run dev` startar API:et, React-appen och Vue-klienten samtidigt. React-appen
+ligger sen på http://localhost:3000, Vue-klienten på http://localhost:3001 och
+API:et på http://localhost:4000. Var för sig: `npm run dev:api`, `npm run dev:web`
+och `npm run dev:client`.
+
+`npm start` finns fortfarande inte i roten använd `npm run dev`.
+
+## Kommandon
+
+Körs från roten. Alla fyra körs även i CI (se [`docs/pipeline.md`](docs/pipeline.md)).
+
+| Kommando | Gör |
+| --- | --- |
+| `npm run lint` | ESLint på `client/` |
+| `npm run format:check` | Prettier kollar formateringen i `client/src/` (ändrar inget) |
+| `npm test` | Vitest kör testerna i `client/` en gång och avslutar |
+| `npm run build` | Vite bygger `client/` till `client/dist` |
+
+Formatera koden lokalt med `npm run format --workspace=client`.
 
 ## Struktur
 
 - `api/` – Express + Postgres (Drizzle)
-- `web/` – React + Vite
+- `web/` – React + Vite (den gamla appen, vyerna portas över till `client/`)
+- `client/` – Vue 3 + Vue Router + Vite (den nya klienten)
 
 ## Deploy
 
-Fråga Marcus.
+Fråga Marcus. TODO: update
